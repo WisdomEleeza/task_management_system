@@ -2,21 +2,19 @@ version: '3.8'
 
 services:
   postgres:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.postgres
+    image: postgres:latest-alpine
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: taskmanagement
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 024Wisdom@29
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5556:5556"
     depends_on:
       - postgres
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/taskmanagement
