@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest-alpine
+    image: postgres:alpine  # Corrected tag to 'alpine'
     ports:
       - "5432:5432"
     environment:
