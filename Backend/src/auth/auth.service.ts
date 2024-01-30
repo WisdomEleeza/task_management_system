@@ -5,5 +5,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor() {}
 
-  async signIn(username: string, password: string): Promise<any> {}
+  async signIn(username: string, password: string): Promise<any> {
+    const salt = 10;
+  }
 }
