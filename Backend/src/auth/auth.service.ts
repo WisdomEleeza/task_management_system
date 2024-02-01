@@ -27,7 +27,7 @@ export class AuthService {
           password: hashedPassword,
         },
       });
-      return this.signupToken(user.id, user.email);
+      return this.Token(user.id, user.email);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw new ForbiddenException('Credentials Taken');
@@ -36,7 +36,20 @@ export class AuthService {
     }
   }
 
-  async signupToken(
+  async signin(dto: AuthDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (!user) throw new ForbiddenException('Credentials Incorrect');
+
+    const passwordMatch = await bcrypt.compare(dto.password, user.password);
+
+    if (!passwordMatch) throw new ForbiddenException('Credentials Incorrect');
+
+    return this.Token(user.id, user.email);
+  }
+
+  async Token(
     userId: number,
     email: string,
   ): Promise<{ access_token: string }> {

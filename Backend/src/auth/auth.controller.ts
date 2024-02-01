@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
-import { AuthGuard } from './guard';
+// import { AuthGuard } from './guard';
 
 // http://localhost:5556/auth/signup
 
@@ -9,10 +9,14 @@ import { AuthGuard } from './guard';
 export class AuthController {
   constructor(private AuthServices: AuthService) {}
 
-
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('signup')
   signup(@Body() dto: AuthDto) {
     return this.AuthServices.signup(dto);
+  }
+
+  @Post('signin')
+  signin(@Body() dto: AuthDto) {
+    return this.AuthServices.signin(dto);
   }
 }
