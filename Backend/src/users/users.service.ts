@@ -8,13 +8,7 @@ export class UsersService {
 
   createTask(dto: UserDto) {
     const task = this.prisma.task.create({
-      data: {
-        title: dto.title,
-        description: dto.description,
-        user: {
-          connect: { id: dto.userId },
-        },
-      },
+      data: { title: dto.title, description: dto.description },
     });
     return task;
   }

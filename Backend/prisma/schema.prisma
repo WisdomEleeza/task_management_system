@@ -15,19 +15,10 @@ model User {
   username String
   email    String @unique()
   password String
-  task     Task[]
-  // roles Role
 }
 
 model Task {
   id          Int    @id @default(autoincrement())
   title       String
   description String
-  userId      Int
-  user        User   @relation(fields: [userId], references: [id])
 }
-
-// enum Role {
-//   USER
-//   ADMIN
-// }
