@@ -1,10 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-// import { Prisma } from '@prisma/client';
+import { UserDto } from './dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  createTask(): Promise {}
+  createTask(dto: UserDto) {
+    const task = this.prisma.task.create({
+      data: {
+        title: dto.title,
+        description: dto.description,
+        user: {
+          connect: { id: dto.userId },
+        },
+      },
+    });
+    return task;
+  }
 }
