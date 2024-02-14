@@ -4,10 +4,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthDto } from './dto';
+import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let PrismaServiceMock: jest.Mocked<PrismaService>;
+  let prismaServiceMock: jest.Mocked<PrismaService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -15,7 +16,7 @@ describe('AuthService', () => {
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
-    PrismaServiceMock = module.get(PrismaService) as jest.Mocked<PrismaService>;
+    prismaServiceMock = module.get(PrismaService) as jest.Mocked<PrismaService>;
   });
 
   it('should be defined', () => {
@@ -38,7 +39,28 @@ describe('AuthService', () => {
         password: 'hashedPassword',
       };
 
-      //
+      // Mock the PrismaService create method
+      jest
+        .spyOn(prismaServiceMock.user, 'create')
+        .mockResolvedValueOnce(mockUser);
+
+      // Mock bcrypt.hash method
+      jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce('hashedPassword');
+
+      // Act
+      const result = await authService.signup(mockAuthDto);
+
+      // Assertion
+      expect(result).toEqual({ access_token: expect.any(String) });
+
+      // Verify that PrismaService create method was called with the correct argument
+      expect(prismaServiceMock.user.create).toHaveBeenCalledWith({
+        data: {
+          username: 'test-username',
+          email: 'test@example.com',
+          password: 'hashedPassword',
+        },
+      });
     });
   });
 });
