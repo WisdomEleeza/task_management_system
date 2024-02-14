@@ -10,7 +10,9 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Post('task')
   createTask(@Request() req, @Body() dto: UserDto) {
-    const user = req.user.id;
+    const user = req.user.email;
+    console.log('User::', user);
+
     return this.UserService.createTask(user, dto);
   }
 }

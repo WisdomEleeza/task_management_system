@@ -6,13 +6,13 @@ import { UserDto } from './dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createTask(userId: number, dto: UserDto) {
+  async createTask(email: string, dto: UserDto) {
     try {
       const task = await this.prisma.task.create({
         data: {
           title: dto.title,
           description: dto.description,
-          user: { connect: { id: userId } },
+          user: { connect: { email: email } },
         },
       });
       return task;
