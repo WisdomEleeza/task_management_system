@@ -99,5 +99,20 @@ describe('AuthService', () => {
       // Verify that bcrypt.compare method was called with the correct argument
       expect(bcrypt.compare).toHaveBeenCalledWith('test123', 'hashedPassword');
     });
+
+    it('should throw ForbiddenException for Incorrect Credentials', async () => {
+      // Arrange
+      const mockAuthDto: AuthDto = {
+        username: 'test-username',
+        email: 'test@gmail.com',
+        password: 'IncorrectPassword',
+      };
+      const mockUser = {
+        id: 1,
+        username: 'test-username',
+        email: 'test@gmail.com',
+        password: 'hashedPassword',
+      };
+    });
   });
 });
