@@ -113,6 +113,14 @@ describe('AuthService', () => {
         email: 'test@gmail.com',
         password: 'hashedPassword',
       };
+
+      // Mock PrismaService findUnique method
+      jest
+        .spyOn(prismaServiceMock.user, 'findUnique')
+        .mockResolvedValueOnce(mockUser);
+
+      // Mock bcrypt.compare method
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValueOnce(false);
     });
   });
 });
