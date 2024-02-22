@@ -121,6 +121,11 @@ describe('AuthService', () => {
 
       // Mock bcrypt.compare method
       jest.spyOn(bcrypt, 'compare' as any).mockResolvedValueOnce(false);
+
+      // Act and Assert
+      await expect(authService.signin(mockAuthDto)).rejects.toThrow(
+        'Credentials Incorrect',
+      );
     });
   });
 });
