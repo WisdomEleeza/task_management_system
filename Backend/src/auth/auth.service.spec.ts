@@ -5,7 +5,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthDto } from './dto';
 import * as bcrypt from 'bcrypt';
-import { ForbiddenException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -46,7 +45,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(mockUser);
 
       // Mock bcrypt.hash method
-      jest.spyOn(bcrypt, 'hash').mockResolvedValueOnce(password);
+      jest.spyOn(bcrypt, 'hash' as any).mockResolvedValueOnce('hashedPassword');
 
       // Act
       const result = await authService.signup(mockAuthDto);
@@ -63,19 +62,5 @@ describe('AuthService', () => {
         },
       });
     });
-    it('should handle PrismaClientKnownRequestError', async () => {
-      // Arrange
-      const mockAuthDto: AuthDto = {
-        username: 'test-username',
-        email: 'test@example.com',
-        password: 'password123',
-      };
-
-      // Mock the PrismaService create method to throw a known error
-      jest
-        .spyOn(prismaServiceMock.user, 'create')
-        .mockRejectedValueOnce(new ForbiddenException('Credentials Taken'));
-    });
-    
   });
 });
