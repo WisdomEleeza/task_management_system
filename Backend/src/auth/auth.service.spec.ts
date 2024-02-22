@@ -63,4 +63,33 @@ describe('AuthService', () => {
       });
     });
   });
+  describe('Sign In', () => {
+    it('should sign in user', async () => {
+      const mockAuthDto: AuthDto = {
+        username: 'test-username',
+        email: 'test@gmail.com',
+        password: 'test123',
+      };
+      const mockUser = {
+        id: 1,
+        username: 'test-username',
+        email: 'test@example.com',
+        password: 'hashedPassword',
+      };
+
+      // Mock the PrismaService findUnique method
+      jest
+        .spyOn(prismaServiceMock.user, 'findUnique')
+        .mockResolvedValueOnce(mockUser);
+
+      // Mock bcrypt.compare method
+      jest.spyOn(bcrypt, 'compare' as any).mockResolvedValueOnce(true);
+
+      // Act
+      const result = await authService.signin(mockAuthDto);
+
+      // Assertion
+      expect(result).toEqual({ access_token: expect.any(String) });
+    });
+  });
 });
