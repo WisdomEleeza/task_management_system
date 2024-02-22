@@ -90,6 +90,14 @@ describe('AuthService', () => {
 
       // Assertion
       expect(result).toEqual({ access_token: expect.any(String) });
+
+      // Verify that PrismaService findUnique method was called with the correct arguments
+      expect(prismaServiceMock.user.findUnique).toHaveBeenCalledWith({
+        where: { email: 'test@gmail.com' },
+      });
+
+      // Verify that bcrypt.compare method was called with the correct argument
+      expect(bcrypt.compare).toHaveBeenCalledWith('test123', 'hashedPassword');
     });
   });
 });
