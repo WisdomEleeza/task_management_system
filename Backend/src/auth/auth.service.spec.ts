@@ -126,6 +126,11 @@ describe('AuthService', () => {
       await expect(authService.signin(mockAuthDto)).rejects.toThrow(
         'Credentials Incorrect',
       );
+
+      // Verify that PrismaService findUnique method was  called with the correct argument
+      expect(prismaServiceMock.user.findUnique).toHaveBeenCalledWith({
+        where: { email: 'test@gmail.com' },
+      });
     });
   });
 });
